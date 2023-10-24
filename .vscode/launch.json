@@ -1,0 +1,122 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+
+        {
+            "name": "contrastive_learning",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/evaluation/train_mimic.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        },
+
+        
+        {
+            "name": "non_contrastive_learning",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/evaluation/train_mimic.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "nc",
+            ]
+        },
+
+        
+        {
+            "name": "iterate_through_folders",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/evaluation/train_mimic.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "datasets\\100_ablations",
+            ]
+        },
+
+        {
+            "name": "generate_cf_pv",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/interpretability/counterfactual_trajectories.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        },
+
+        {
+            "name": "generate_cf_step",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/interpretability/counterfactual_trajectories.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--method", "step",
+                "--num_runs", "200",
+                "--num_deviations", "4",
+            ]
+        },
+
+        {
+            "name": "generate_cf_mcts",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/interpretability/counterfactual_trajectories.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--method", "mcts",
+                "--num_runs", "60",
+                "--num_iterations", "10",
+                "--starting_points", "5",
+                "--discount_factor", "1.0",
+                "--num_simulations", "5",
+            ]
+        },
+
+        {
+            "name": "train_mimic",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/evaluation/train_mimic_sidebyside_multi.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--num_seeds", "10",
+                "--method", "mcts",
+                "--model_type", "linear",
+                // "--weight_con", "5",
+                // "--weight_sin", "1",
+            ]
+        },
+
+        {
+            "name": "random_cf_generator",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/interpretability/generation_methods/random_cf_generator.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--likelihood_terminal", "0.65",
+                "--num_runs", "10",
+                // "--weight_con", "5",
+                // "--weight_sin", "1",
+            ]
+        },
+
+}
