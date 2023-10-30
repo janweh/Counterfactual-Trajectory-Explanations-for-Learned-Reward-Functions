@@ -31,7 +31,6 @@ learned reward function.
 ## Generating Counterfactual Trajectory Explanations
 1. Generate full original trajectories $\tau_{org}$:  
 ``python cte\generate_original_trajectories.py``  
-Provided original trajectories: Provided generator (used as policy trained on reward function): demonstrations\original_trajectories_new_maxsteps75_airl_1000_new.pkl  
 2. Generate CTEs:  
 ``python cte\counterfactual_trajectories.py``  
 by specifying --method {'mcto', 'dac'} you can choose the method used. You can also adjust hyperparamters here. The default are the highest performing hyperparameters that were used in the project.  
