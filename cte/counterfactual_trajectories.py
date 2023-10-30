@@ -3,13 +3,11 @@ import os
 from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
-from moral.ppo import PPO, TrajectoryDataset, update_policy
+from rl_airl.ppo import PPO, TrajectoryDataset, update_policy
 import torch
-from moral.airl import *
-from moral.active_learning import *
+from rl_airl.airl import *
 import numpy as np
 from envs.gym_wrapper import *
-from moral.preference_giver import *
 import argparse
 import sys
 from copy import *
@@ -17,11 +15,11 @@ from helpers.visualize_trajectory import visualize_two_part_trajectories, visual
 from helpers.util_functions import *
 import random 
 import time
-from quality_metrics.quality_metrics import measure_quality, evaluate_qcs_for_cte
+from quality_metrics.quality_value import measure_quality, evaluate_qcs_for_cte
 from quality_metrics.distance_measures import distance_all as distance_all
 import pickle
 from helpers.parsing import sort_args, parse_attributes
-from generation_methods.counterfactual_mcts import *
+from cte.generation_methods.counterfactual_mcto import *
 from generation_methods.counterfactual_step import *
 from generation_methods.counterfactual_random import *
 from quality_metrics.critical_state_measures import critical_state_all as critical_state
@@ -35,7 +33,6 @@ class config:
     env_steps= 8e6
     batchsize_ppo= 12
     n_queries= 50
-    preference_noise= 0
     n_workers= 1
     lr_ppo= 3e-4
     entropy_reg= 0.25
@@ -49,7 +46,7 @@ class config:
     criteria = ['validity', 'diversity', 'proximity', 'critical_state', 'realisticness', 'sparsity']
     # criteria = ['baseline']
     # criteria = ['validity']
-    cf_method = 'mcts' # 'mcts' or 'step'
+    cf_method = 'mcto' # 'mcto' or 'dac'
     scrambled_weights = False
     unit_weights = False
     start_run = 0
@@ -59,7 +56,7 @@ def str2bool(v):
 
 def read_out_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--method', type=str, default='mcts')
+    parser.add_argument('--method', type=str, default='mcto')
     parser.add_argument('--num_iterations', type=int, default=5)
     parser.add_argument('--action_threshold', type=float, default=0.003)
     parser.add_argument('--likelihood_terminal', type=float, default=0.2)
@@ -83,8 +80,8 @@ def read_out_args():
     args = parser.parse_args()
     conf = {}
     file_name = 'a'
-    if args.method == 'mcts':
-        config.cf_method = 'mcts'
+    if args.method == 'mcto':
+        config.cf_method = 'mcto'
         conf['num_iterations'] = args.num_iterations
         if args.num_iterations != 40:
             file_name += '_num_iterations' + str(args.num_iterations)
@@ -110,8 +107,8 @@ def read_out_args():
         if args.num_simulations != 1:
             file_name += '_num_simulations' + str(args.num_simulations)
 
-    elif args.method == 'step':
-        config.cf_method = 'step'
+    elif args.method == 'dac':
+        config.cf_method = 'dac'
         conf['ending_meeting'] = args.ending_meeting
         if args.ending_meeting != False:
             file_name += '_ending_meeting' + str(args.ending_meeting)
@@ -208,26 +205,26 @@ if __name__ == '__main__':
         time_start = time.time()
 
         # generate the counterfactual trajectories
-        if config.cf_method == 'mcts':
-            # Method 1: MCTS            
+        if config.cf_method == 'mcto':
+            # Method 1: mcto            
             traj_org, traj_cf, traj_start = generate_counterfactual_mcts(org_traj, ppo, discriminator, seed_env, all_org_trajs, all_cf_trajs, all_starts, config, conf=conf, weights=weight)
             efficiency = time.time() - time_start
             # visualize_two_part_trajectories_part(traj_org, traj_cf)
 
 
-            mcts_rewards = sum(traj_org['rewards'])
-            all_part_orgs.append((traj_org, mcts_rewards))
-            mcts_rewards_cf = sum(traj_cf['rewards'])
-            all_part_cfs.append((traj_cf, mcts_rewards_cf))
+            mcto_rewards = sum(traj_org['rewards'])
+            all_part_orgs.append((traj_org, mcto_rewards))
+            mcto_rewards_cf = sum(traj_cf['rewards'])
+            all_part_cfs.append((traj_cf, mcto_rewards_cf))
             print(len(all_part_cfs))
 
-            # # # append this to 'datasets\1000mcts\1000\cf_trajectories_tmp.pkl'
+            # # # append this to 'datasets\1000mcto\1000\cf_trajectories_tmp.pkl'
             # try:
             #     with open(os.path.join(path_folder, 'cf_trajectories_tmp.pkl'), 'rb') as f:
             #         data = pickle.load(f)
             # except:
             #     data = []
-            # data.append((traj_cf, mcts_rewards_cf))
+            # data.append((traj_cf, mcto_rewards_cf))
             # with open(os.path.join(path_folder, 'cf_trajectories_tmp.pkl'), 'wb') as f:
             #     pickle.dump(data, f)
             # try:
@@ -235,7 +232,7 @@ if __name__ == '__main__':
             #         data = pickle.load(f)
             # except:
             #     data = []
-            # data.append((traj_org, mcts_rewards))
+            # data.append((traj_org, mcto_rewards))
             # print(len(data))
             # with open(os.path.join(path_folder, 'org_trajectories_tmp.pkl'), 'wb') as f:
             #     pickle.dump(data, f)
@@ -250,8 +247,8 @@ if __name__ == '__main__':
             #     pickle.dump(data, f)
 
 
-        if config.cf_method == 'step':
-            # Method 2: 1-step deviation
+        if config.cf_method == 'dac':
+            # Method 2:Deviate and Continue
             counterfactual_trajs, counterfactual_rewards, starts, end_cfs, end_orgs = generate_counterfactual_step(org_traj, ppo, discriminator, seed_env, config, conf=conf)
             if not baseline:
                 # use the quality criteria to determine the best counterfactual trajectory
@@ -269,12 +266,12 @@ if __name__ == '__main__':
             efficiency = time.time() - time_start
 
             traj_org = partial_trajectory(org_traj, traj_start, chosen_end_org)
-            step_rewards = sum(traj_org['rewards'])
-            all_part_orgs.append((traj_org, step_rewards))
+            dac_rewards = sum(traj_org['rewards'])
+            all_part_orgs.append((traj_org, dac_rewards))
 
             traj_cf = partial_trajectory(chosen_counterfactual_trajectory, traj_start, chosen_end_cf)
-            step_rewards_cf = sum(traj_cf['rewards'])
-            all_part_cfs.append((traj_cf, step_rewards_cf))
+            dac_rewards_cf = sum(traj_cf['rewards'])
+            all_part_cfs.append((traj_cf, dac_rewards_cf))
 
             # print(len(traj_org['states']), len(traj_org['actions']))
             # visualize_two_part_trajectories_part(traj_org, traj_cf)

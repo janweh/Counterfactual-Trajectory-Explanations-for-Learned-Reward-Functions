@@ -3,3 +3,6 @@ demonstrations/
 saved_models/tmp/
 logs/
 __pycache__/
+*.sbatch
+*.bat
+wandb/

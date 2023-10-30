@@ -3,13 +3,11 @@ from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
 from tqdm import tqdm
-from moral.ppo import PPO
+from rl_airl.ppo import PPO
 import torch
-from moral.airl import *
-from moral.active_learning import *
+from rl_airl.airl import *
 import numpy as np
 from envs.gym_wrapper import *
-from moral.preference_giver import *
 import sys
 import tensorflow as tf
 from copy import *
@@ -17,7 +15,7 @@ from helpers.util_functions import *
 import random 
 import time
 import pickle
-import evaluation.reward_features as erf
+import evaluation.features as erf
 import os
 
 class config:
@@ -25,7 +23,6 @@ class config:
     env_steps= 8e6
     batchsize_ppo= 12
     n_queries= 50
-    preference_noise= 0
     n_workers= 1
     lr_ppo= 3e-4
     entropy_reg= 0.25

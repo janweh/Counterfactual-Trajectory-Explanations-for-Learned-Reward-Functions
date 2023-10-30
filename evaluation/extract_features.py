@@ -4,7 +4,7 @@ adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
 import pickle
 import os
-import evaluation.reward_features as erf
+import evaluation.features as erf
 import random
 import numpy as np
 from copy import deepcopy

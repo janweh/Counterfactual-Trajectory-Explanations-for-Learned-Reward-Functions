@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
-from moral.ppo import PPO
+from rl_airl.ppo import PPO
 import torch
 from envs.gym_wrapper import GymWrapper
 import pickle

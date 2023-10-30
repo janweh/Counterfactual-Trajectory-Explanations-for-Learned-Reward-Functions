@@ -4,13 +4,13 @@ from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent.parent
 sys.path.append(str(adjacent_folder))
 from tqdm import tqdm
-from moral.ppo import PPO, TrajectoryDataset, update_policy
+from rl_airl.ppo import PPO, TrajectoryDataset, update_policy
 import torch
-from moral.airl import *
-from moral.active_learning import *
+from rl_airl.airl import *
+from rl_airl.active_learning import *
 import numpy as np
 from envs.gym_wrapper import *
-from moral.preference_giver import *
+from rl_airl.preference_giver import *
 import argparse
 import sys
 from copy import *

@@ -3,10 +3,10 @@ from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
 from tqdm import tqdm
-from moral.ppo import PPO, TrajectoryDataset, update_policy
+from rl_airl.ppo import PPO, TrajectoryDataset, update_policy
 from stable_baselines3.common.vec_env import SubprocVecEnv
 from envs.gym_wrapper import *
-from moral.airl import *
+from rl_airl.airl import *
 import torch
 import numpy as np
 import pickle

@@ -12,16 +12,16 @@ from quality_metrics.sparsity_measure import sparsitiy_single_partial
 from interpretability.generation_methods.counterfactual_random import generate_counterfactual_random
 from interpretability.generation_methods.counterfactual_mcts import generate_counterfactual_mcts
 from interpretability.generation_methods.counterfactual_step import generate_counterfactual_step
-from quality_metrics.quality_metrics import measure_quality
+from quality_metrics.quality_value import measure_quality
 import numpy as np
 import pickle
 from helpers.util_functions import partial_trajectory
 import torch
-from moral.ppo import PPO, TrajectoryDataset, update_policy
+from rl_airl.ppo import PPO, TrajectoryDataset, update_policy
 import random
 from envs.gym_wrapper import *
-from moral.airl import *
-from moral.active_learning import *
+from rl_airl.airl import *
+from rl_airl.active_learning import *
 
 class config:
     env_id= 'randomized_v2'

@@ -4,20 +4,20 @@ from pathlib import Path
 adjacent_folder = Path(__file__).parent.parent
 sys.path.append(str(adjacent_folder))
 from tqdm import tqdm
-from moral.ppo import PPO, TrajectoryDataset, update_policy
+from rl_airl.ppo import PPO, TrajectoryDataset, update_policy
 import torch
-from moral.airl import *
-from moral.active_learning import *
+from rl_airl.airl import *
+from rl_airl.active_learning import *
 import numpy as np
 from envs.gym_wrapper import *
-from moral.preference_giver import *
+from rl_airl.preference_giver import *
 import sys
 from copy import *
 from helpers.visualize_trajectory import visualize_two_part_trajectories
 from helpers.util_functions import *
 import random 
 import time
-from quality_metrics.quality_metrics import measure_quality, evaluate_qcs_for_cte, evaluate_qc
+from quality_metrics.quality_value import measure_quality, evaluate_qcs_for_cte, evaluate_qc
 from quality_metrics.distance_measures import distance_all as distance_all
 from quality_metrics.critical_state_measures import critical_state_all as critical_state
 from quality_metrics.diversity_measures import diversity_single
@@ -25,7 +25,7 @@ import pickle
 from helpers.parsing import sort_args, parse_attributes
 from collections import defaultdict
 from helpers.util_functions import extract_player_position
-from moral.ppo import PPO
+from rl_airl.ppo import PPO
 from torch.distributions import Categorical
 from helpers.util_functions import partial_trajectory
 from envs.randomized_v2_reimplementation import step_v2, MAX_STEPS

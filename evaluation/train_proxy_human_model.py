@@ -476,12 +476,12 @@ def learning_repeats(path_org, path_cf, base_path, contrastive=True, baseline=0,
     # show_loss_plot(all_train_losses, all_test_losses_con, show=config.print_plot, save_path=results_path, epochs=epochs, third_graph=all_test_losses_sin)
     # print('predicition label pairs', pred_label_pairs)
 
-    print('test_loss_ood', np.mean(test_loss_oods_con), np.mean(test_loss_oods_sin))
-    print('test mean error ood', np.mean(test_mean_error_oods_con), np.mean(test_mean_error_oods_sin))
-    print('test rmse ood', np.mean(test_rmse_oods_con), np.mean(test_rmse_oods_sin))
-    print('test r2 ood', np.mean(r2_oods_con), np.mean(r2_oods_sin))
-    print('pearson correlation ood', np.mean(pearson_correlation_oods_con), np.mean(pearson_correlation_oods_sin))
-    print('spearman correlation ood', np.mean(spearman_correlation_oods_con), np.mean(spearman_correlation_oods_sin))
+    print('test_loss_combined', np.mean(test_loss_oods_con), np.mean(test_loss_oods_sin))
+    print('test mean error combined', np.mean(test_mean_error_oods_con), np.mean(test_mean_error_oods_sin))
+    print('test rmse combined', np.mean(test_rmse_oods_con), np.mean(test_rmse_oods_sin))
+    print('test r2 combined', np.mean(r2_oods_con), np.mean(r2_oods_sin))
+    print('pearson correlation combined', np.mean(pearson_correlation_oods_con), np.mean(pearson_correlation_oods_sin))
+    print('spearman correlation combined', np.mean(spearman_correlation_oods_con), np.mean(spearman_correlation_oods_sin))
 
     if config.save_results:
         to_save = {'train_losses': train_lossess, 'test_losses': test_lossess_con, 'test_mean_errors': test_mean_errors_con, 
@@ -686,7 +686,7 @@ def read_arguments():
     parser.add_argument('--model_type', type=str, default='NN')
 
     args = parser.parse_args()
-    folder_path = os.path.join('datasets', 'ablations_norm', 'best_linear', args.method)   
+    folder_path = os.path.join('datasets', 'ablations_norm', 'best_linear', args.method)
         
     config.model_type = args.model_type
     hyperparameters.number_of_seeds = args.num_seeds
