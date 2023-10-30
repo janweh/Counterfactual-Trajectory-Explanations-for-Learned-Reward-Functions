@@ -57,5 +57,6 @@ By default this will use a Neural Network as a model, but you can specify --mode
 
 It will output multiple statistics. The key metric used in the project is: 'spearman correlation combined' and 'spearman correlation'   
 
-
-There 
+You can already find some datasets of CTEs in the repository in datasets:
+* weights_norm has CTEs created by mcto and dac for different sets of weights
+* ablations_norm has the best CTEs created by mcto and dac and random for their respective best set of weights for a NN and Linear Model
