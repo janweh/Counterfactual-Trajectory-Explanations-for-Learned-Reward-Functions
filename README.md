@@ -10,9 +10,9 @@
 
 
 ## Learning a reward function:
-1. Train a policy $\pi*$: 
-  ``python rl_airl\ppo_train.py``
-  Provided expert policy: `saved_models\ppo_v2_[1, 10].pt`
+1. Train a policy $\pi*$: \\
+  ``python rl_airl\ppo_train.py``\\
+  Provided expert policy: `saved_models\ppo_v2_[1, 10].pt`\\
 2. Generate expert demonstrations $D$:
   ``python rl_airl\generate_demos.py``
   Provided demonstrations: `demonstrations\original_trajectories_new_maxsteps75_airl_1000_new.pkl`
