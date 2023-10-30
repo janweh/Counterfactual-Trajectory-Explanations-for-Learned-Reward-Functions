@@ -1,4 +1,9 @@
-# Multi-Objective Reinforced Active Learning
+# Counterfactual Trajectory Explanations for Learned Reward Functions
+
+## Description
+This work aims to explain reward functions that were learned through Adversarial Inverse Reinforcement Learning by generating Counterfactual Explanations. These Counterfactual Trajectory Explanations (CTEs) 
+consist of one partial original and counterfactual trajectory and their respective average reward. By training a proxy-human model on the CTEs and measuring whether it can predict rewards similar to the 
+learned reward function.
 
 ## Dependencies
 * wandb
@@ -18,17 +23,17 @@
   Provided demonstrations: `demonstrations\original_trajectories_new_maxsteps75_airl_1000_new.pkl`  
 3. Train AIRL to get the learned reward function $R_\theta$ and policy $\pi_\theta$:  
   ``python rl_airl\airl_train.py``  
-  Provided discriminator (used as reward function): saved_models\discriminator_v2_[1,10]_new.pt  
+  Provided discriminator (used as reward function): `saved_models\discriminator_v2_[1,10]_new.pt`   
 
 
 
 
 ## Generating Counterfactual Trajectory Explanations
 1. Generate full original trajectories $\tau_{org}$:  
-python cte\generate_original_trajectories.py  
+``python cte\generate_original_trajectories.py``  
 Provided original trajectories: Provided generator (used as policy trained on reward function): demonstrations\original_trajectories_new_maxsteps75_airl_1000_new.pkl  
 2. Generate CTEs:  
-python cte\counterfactual_trajectories.py  
+``python cte\counterfactual_trajectories.py``  
 by specifying --method {'mcto', 'dac'} you can choose the method used. You can also adjust hyperparamters here. The default are the highest performing hyperparameters that were used in the project.  
 You can specify which weight for quality criteria should be used:  
 
@@ -39,17 +44,15 @@ For randomly generated CTEs use: python cte\generation_methods\random_cf_generat
 
 ## Evaluating informativeness of CTEs  
 1. Extracting Features:  
-python evaluation\extract_features.py  
+``python evaluation\extract_features.py``  
 You will have to place the path to folder folder where the CTEs are saved in the variable folder_path  
 
 2. Generate combined dataset  
-In this step you can also perform hyperparameter tuning for all sets that go into the combined test set.  
-
-python evaluation\architecture_tuning.py  
-You will have to replace the folder paths with the folders of CTEs (where the extracted features are saved) for which you want one combined test set  
+``python evaluation\architecture_tuning.py``  
+In this step you can also perform hyperparameter tuning for all sets that go into the combined test set. You will have to replace the folder paths with the folders of CTEs (where the extracted features are saved) for which you want one combined test set  
 
 3. Train the Proxy-human model  
-python evaluation\train_proxy_human_model.py  
+``python evaluation\train_proxy_human_model.py``  
 By default this will use a Neural Network as a model, but you can specify --model_type 'linear' for a linear model  
 --num_seeds determines how many random initialisations of the model will be trained  
 
