@@ -57,3 +57,6 @@ By default this will use a Neural Network as a model, but you can specify --mode
 --num_seeds determines how many random initialisations of the model will be trained  
 
 It will output multiple statistics. The key metric used in the project is: 'spearman correlation combined' and 'spearman correlation'   
+
+
+There 
